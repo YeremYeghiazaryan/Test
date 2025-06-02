@@ -13,11 +13,13 @@ class PostController extends Controller
         $postData = $request->validate([
             'name' => 'required',
             'website_id' => 'required|exists:websites,id|integer',
+            'title' => 'required',
         ]);
 
         $post = Post::create($postData);
         if ($post) {
             sendMailSubscribers::dispatch($post);
+            return response()->json([ 'post' => $post,'message' => 'post created'], 201);
 
         } else {
             return response()->json(['message' => 'Error'], 500);

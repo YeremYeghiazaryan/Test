@@ -53,16 +53,12 @@
     </div>
 
     <div class="content">
-        <p><strong>Nmae:</strong> {{ $post->name ?? 'Не указано' }}</p>
-        <p><strong>Email:</strong> {{ $post->email ?? 'Не указано' }}</p>
-        <p><strong>Subject:</strong> {{ $post->subject ?? 'Нет темы' }}</p>
-        <p><strong>Message:</strong></p>
-        <p>{{ $post->message ?? 'Пусто' }}</p>
+        <p><strong>Post Name:</strong> {{ $post->name}}</p>
+        <p><strong>Post Title</strong> {{ $post->title}}</p>
     </div>
 
     <div class="footer">
         This letter has been sent automatically. Please do not reply to it.
-        test git asdasdasd
     </div>
 </div>
 </body>

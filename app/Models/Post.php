@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
-    /** @use HasFactory<\Database\Factories\PostFactory> */
-    use HasFactory;
 
     public function website():BelongsTo
     {
@@ -17,6 +15,7 @@ class Post extends Model
     }
     protected $fillable = [
         'name',
+        'title',
         'website_id'
     ];
 }

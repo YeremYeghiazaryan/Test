@@ -29,6 +29,7 @@ class sendMailSubscribers implements ShouldQueue
      */
     public function handle(): void
     {
+
         $website = $this->post->website;
         $website->subscribers()
             ->orderBy('users.id')
