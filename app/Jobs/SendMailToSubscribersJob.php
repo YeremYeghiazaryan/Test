@@ -10,7 +10,8 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class sendMailSubscribers implements ShouldQueue
+
+class SendMailToSubscribersJob implements ShouldQueue
 {
     use  Dispatchable, InteractsWithQueue, Queueable;
 
@@ -37,5 +38,9 @@ class sendMailSubscribers implements ShouldQueue
                     Mail::to($user->email)->send(new ContactMessage($this->post));
                 }
             });
+
+        $this->post->postNotificationStatus()->update([
+            'sent' => true
+        ]);
     }
 }

@@ -14,7 +14,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-Schedule::command('send:mailSubscribers')->everyMinute();
+Schedule::command('send:mailSubscribers')->everyTwoMinutes();
 
 
 

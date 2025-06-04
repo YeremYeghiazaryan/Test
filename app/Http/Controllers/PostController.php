@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Jobs\sendMailSubscribers;
+use App\Models\PostNotificationStatus;
+use App\Models\SendSubscriber;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -17,6 +17,11 @@ class PostController extends Controller
         ]);
 
         $post = Post::create($postData);
+
+        PostNotificationStatus::create([
+            'post_id' => $post->id
+        ]);
+
         if ($post) {
             return response()->json([ 'post' => $post,'message' => 'post created'], 201);
 
