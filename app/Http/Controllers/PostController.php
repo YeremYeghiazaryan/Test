@@ -18,11 +18,10 @@ class PostController extends Controller
 
         $post = Post::create($postData);
         if ($post) {
-            sendMailSubscribers::dispatch($post);
             return response()->json([ 'post' => $post,'message' => 'post created'], 201);
 
         } else {
-            return response()->json(['message' => 'Error'], 500);
+            return response()->json(['message' => 'post not created'], 500);
         }
     }
 }
