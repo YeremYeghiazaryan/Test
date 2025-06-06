@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\PostNotificationStatus;
 use App\Models\SendSubscriber;
 use App\Models\Post;
+use App\Models\Website;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
