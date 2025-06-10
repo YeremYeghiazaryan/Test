@@ -49,7 +49,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand fs-3 fw-bold" href="{{route("indexBlade")}}">Home</a>
+        <a class="navbar-brand fs-3 fw-bold" href="{{route("index")}}">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,8 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center gap-3">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('createWebsiteBlade') ? 'active' : '' }}"
-                       href="{{ route('createWebsiteBlade') }}">
+                    <a class="nav-link {{ request()->routeIs('create-website') ? 'active' : '' }}"
+                       href="{{ route('create-website') }}">
                         <i class="bi bi-plus-circle"></i> Create Website
                     </a>
                 </li>
@@ -118,7 +118,7 @@
         let website_id = $(button).data('website-id');
         $.ajax({
             method: "GET",
-            url: '{{route('destroyWebsite')}}',
+            url: '{{route('remove-website')}}',
             data: {
                 'website_id': website_id,
             },
@@ -140,7 +140,7 @@
     $(document).ready(function () {
         $.ajax({
             method: "GET",
-            url: "{{route('showAllWebsites')}}",
+            url: "{{route('show-all-websites')}}",
             success: function (response) {
                 if (response.status == true) {
                     let datas = response.data
@@ -152,7 +152,7 @@
                                     <td>${data.name}</td>
                                     <td>${data.created_at}</td>
                                     <td>
-                                        <a class="btn btn-success" href=""><i class="fa-solid fa-eye"></i></a>
+                                        <a class="btn btn-success" href="/show/${data.id}"><i class="fa-solid fa-eye"></i></a>
                                         <a class="btn btn-warning text-light" href="/edit/${data.id}" ><i class="fa-solid fa-pen-to-square"></i></a>
                                         <button onclick="delete_website(this)" type="submit"  data-website-id="${data.id}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
 

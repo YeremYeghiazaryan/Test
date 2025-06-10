@@ -13,14 +13,15 @@ use Illuminate\Queue\SerializesModels;
 class ContactMessage extends Mailable
 {
     use Queueable, SerializesModels;
-     public Post $post;
+
+    public Post $post;
 
     /**
      * Create a new message instance.
      */
     public function __construct(Post $post)
     {
-            $this->post = $post;
+        $this->post = $post;
     }
 
     /**

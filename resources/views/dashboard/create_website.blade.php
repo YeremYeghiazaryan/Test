@@ -50,7 +50,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand fs-3 fw-bold" href="{{route("indexBlade")}}">Home</a>
+        <a class="navbar-brand fs-3 fw-bold" href="{{route("index")}}">Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -60,8 +60,8 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center gap-3">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('createWebsiteBlade') ? 'active' : '' }}"
-                       href="{{ route('createWebsiteBlade') }}">
+                    <a class="nav-link {{ request()->routeIs('create-website') ? 'active' : '' }}"
+                       href="{{ route('create-website') }}">
                         <i class="bi bi-plus-circle"></i> Create Website
                     </a>
                 </li>
@@ -81,7 +81,7 @@
 <div class="container  mt-5 pt-5">
     <h3 class="mb-4 text-center">Create Website</h3>
 
-    <form action="{{route('storeWebsite')}}" method="POST" class="border p-4 rounded shadow-sm bg-light">
+    <form action="{{route('store-website')}}" method="POST" class="border p-4 rounded shadow-sm bg-light">
         <div class="mb-3">
             @csrf
             <label for="name" class="form-label">Website Name</label>
@@ -100,11 +100,15 @@
 </div>
 
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://kit.fontawesome.com/f04da0ed90.js" crossorigin="anonymous"></script>
 
 </body>

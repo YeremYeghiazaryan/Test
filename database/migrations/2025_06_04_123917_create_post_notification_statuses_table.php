@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('post_notification_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unique(['post_id', 'user_id']);
             $table->boolean('sent')->default(false);
             $table->timestamps();
         });

@@ -49,7 +49,7 @@ class WebsiteController extends Controller
             'user_id' => Auth::id(),
         ]);
         return $website
-            ? redirect()->route('createWebsiteBlade')->with('message', 'Created successfully!')
+            ? redirect()->route('index')->with('message', 'Created successfully!')
             : redirect()->back()->with('error', 'Failed to create post.');
     }
 
@@ -58,6 +58,8 @@ class WebsiteController extends Controller
      */
     public function show(string $id)
     {
+        $website = Website::all()->where('id', $id)->first();
+        return view('dashboard.show_website', ['website' => $website]);
 
     }
 
@@ -89,7 +91,7 @@ class WebsiteController extends Controller
         $website = Website::where('id', $id)->update([
             'name' => $validated['name'],
         ]);
-        return redirect()->route('indexBlade')->with('message', 'Updated successfully!');
+        return redirect()->route('index')->with('message', 'Updated successfully!');
 
     }
 

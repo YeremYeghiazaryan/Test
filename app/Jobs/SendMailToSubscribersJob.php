@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\ContactMessage;
 use App\Models\Post;
+use App\Models\PostNotificationStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -15,14 +16,14 @@ class SendMailToSubscribersJob implements ShouldQueue
 {
     use  Dispatchable, InteractsWithQueue, Queueable;
 
-    public Post $post;
+    public PostNotificationStatus $postNotificationStatus;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Post $post)
+    public function __construct(PostNotificationStatus $postNotificationStatus)
     {
-        $this->post = $post;
+        $this->postNotificationStatus = $postNotificationStatus;
     }
 
     /**
@@ -30,16 +31,10 @@ class SendMailToSubscribersJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $website = $this->post->website;
-        $website->subscribers()
-            ->orderBy('users.id')
-            ->chunkById(1000, function ($subscribers) {
-                foreach ($subscribers as $user) {
-                    Mail::to($user->email)->send(new ContactMessage($this->post));
-                }
-            });
-
-        $this->post->postNotificationStatus()->update([
+        $user = $this->postNotificationStatus->user;
+        $post = $this->postNotificationStatus->post;
+        Mail::to($user->email)->send(new ContactMessage($post));
+        $this->postNotificationStatus->update([
             'sent' => true
         ]);
     }

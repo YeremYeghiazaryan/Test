@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Create</title>
+    <title>@yield('Update')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
-
     <style>
         .navbar {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -47,7 +46,6 @@
     </style>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
         <a class="navbar-brand fs-3 fw-bold" href="{{route("index")}}">Home</a>
@@ -62,7 +60,13 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('create-website') ? 'active' : '' }}"
                        href="{{ route('create-website') }}">
-                        <i class="bi bi-plus-circle"></i> Create Website
+                        <i class="bi bi-plus-circle"></i> Create Websites
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('create-post') ? 'active' : '' }}"
+                       href="{{ route('create-post',['id' => $website->id] ) }}">
+                        <i class="bi bi-plus-circle"></i> Create Post
                     </a>
                 </li>
                 <li class="nav-item">
@@ -78,27 +82,27 @@
     </div>
 </nav>
 
-<div class="container  mt-5 pt-5">
-    <h3 class="mb-4 text-center">Update Website</h3>
+<div class="container mt-5 pt-5">
 
-    <form action="{{route('update-website')}}" method="POST" class="border p-4 rounded shadow-sm bg-light">
-        <div class="mb-3">
-            @csrf
-            <input type="hidden" name="id" value="{{ $website->id }}">
-            <label for="name" class="form-label"> Website Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{$website->name}}" required>
-            @error('name')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-            @if (session('message'))
-                <div class="text-success">
-                    {{ session('message') }}
-                </div>
-            @endif
-        </div>
-        <button type="submit" class="btn btn-success w-100">Create Website</button>
-    </form>
+    <h2 class="mb-4 text-center">Posts</h2>
+
+    <table class="table table-striped table-hover shadow-sm rounded align-middle text-center">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Post Name</th>
+            <th scope="col">Post Title</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody id="posts">
+
+
+        </tbody>
+    </table>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -114,5 +118,67 @@
 </body>
 </html>
 
+<script>
 
+
+    function delete_post(button) {
+        let post_id = $(button).data('post-id');
+        $.ajax({
+            method: "GET",
+            url: '{{route('remove-post')}}',
+            data: {
+                'post_id': post_id,
+            },
+            success: function (response) {
+                if (response.status == true) {
+                    alert(response.message);
+                    $("#posts #post_" + post_id).remove();
+                } else {
+                    alert(response.message);
+                }
+
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+    }
+
+    let website_id = @json($website->id);
+    $(document).ready(function () {
+        $.ajax({
+            method: "GET",
+            url: "{{route('show-all-posts')}}",
+            data: {
+                'website_id': website_id,
+            },
+            success: function (response) {
+                if (response.status == true) {
+                    let datas = response.data
+                    let post = ""
+                    for (let data of datas) {
+                        post += `
+                                 <tr id = post_${data.id}>
+                                    <th scope="row">${data.id}</th>
+                                    <td>${data.name}</td>
+                                    <td>${data.title}</td>
+                                    <td>${data.created_at}</td>
+                                    <td>
+                                        <button onclick="delete_post(this)" type="submit"  data-post-id="${data.id}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+
+                                    </td>
+                                </tr>
+                        `
+                        $("#posts").html(post);
+                    }
+
+                }
+            },
+            error: function () {
+                console.log(response)
+            }
+        });
+    });
+
+</script>
 

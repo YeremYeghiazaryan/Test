@@ -66,6 +66,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('create-post') ? 'active' : '' }}"
+                       href="{{ route('create-website') }}">
+                        <i class="bi bi-plus-circle"></i> Create Post
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <form action="{{route('logout')}}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-link nav-link">
@@ -79,26 +86,34 @@
 </nav>
 
 <div class="container  mt-5 pt-5">
-    <h3 class="mb-4 text-center">Update Website</h3>
+    <h3 class="mb-4 text-center">Create Post</h3>
 
-    <form action="{{route('update-website')}}" method="POST" class="border p-4 rounded shadow-sm bg-light">
+    <form action="{{route('store-post')}}" method="POST" class="border p-4 rounded shadow-sm bg-light">
         <div class="mb-3">
             @csrf
-            <input type="hidden" name="id" value="{{ $website->id }}">
-            <label for="name" class="form-label"> Website Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{$website->name}}" required>
+            <input type="hidden" name="website_id" value="{{$id}}">
+            <label for="name" class="form-label">Post Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Post Name" required>
             @error('name')
             <div class="text-danger">{{ $message }}</div>
             @enderror
+            <label for="title" class="form-label">Post Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Post Title" required>
+            @error('title')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
+
             @if (session('message'))
                 <div class="text-success">
                     {{ session('message') }}
                 </div>
             @endif
+
         </div>
-        <button type="submit" class="btn btn-success w-100">Create Website</button>
+        <button type="submit" class="btn btn-success w-100">Create Post</button>
     </form>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -113,6 +128,5 @@
 
 </body>
 </html>
-
 
 
