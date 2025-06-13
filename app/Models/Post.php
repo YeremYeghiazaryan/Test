@@ -13,7 +13,8 @@ class Post extends Model
     protected $fillable = [
         'name',
         'title',
-        'website_id'
+        'website_id',
+        'verified'
     ];
     public function notifiedUser(): BelongsToMany
     {

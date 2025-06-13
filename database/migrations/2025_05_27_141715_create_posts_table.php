@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('title');
             $table->foreignId('website_id')->constrained()->onDelete('cascade');
+            $table->boolean('verified')->default(false);
             $table->timestamps();
         });
     }

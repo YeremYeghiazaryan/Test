@@ -29,11 +29,9 @@ class SendNotificationToSubscribersCommand extends Command
      */
     public function handle()
     {
-        PostNotificationStatus::where('sent', false)->orderBy('created_at')->chunk(100, function ($postNotificationStatuses) {
-            foreach ($postNotificationStatuses as $postNotificationStatus) {
-                SendMailToSubscribersJob::dispatch($postNotificationStatus);
-            }
-        });
 
+        PostNotificationStatus::where('sent', false)->orderBy('created_at')->chunk(100, function ($postNotificationStatuses) {
+            SendMailToSubscribersJob::dispatch($postNotificationStatuses);
+        });
     }
 }

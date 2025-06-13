@@ -20,6 +20,7 @@
             transition: color 0.25s ease, transform 0.25s ease;
             position: relative;
         }
++
 
         .navbar .nav-link:hover,
         .navbar .nav-link.active {

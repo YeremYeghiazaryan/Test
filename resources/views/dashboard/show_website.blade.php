@@ -84,7 +84,7 @@
 
 <div class="container mt-5 pt-5">
 
-    <h2 class="mb-4 text-center">Posts</h2>
+    <h2 class="mb-4 text-center">Posts </h2>
 
     <table class="table table-striped table-hover shadow-sm rounded align-middle text-center">
         <thead class="table-dark">
@@ -93,6 +93,7 @@
             <th scope="col">Post Name</th>
             <th scope="col">Post Title</th>
             <th scope="col">Created At</th>
+            <th scope="col">Verification</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -148,37 +149,46 @@
     $(document).ready(function () {
         $.ajax({
             method: "GET",
-            url: "{{route('show-all-posts')}}",
+            url: "{{ route('show-all-posts') }}",
             data: {
                 'website_id': website_id,
             },
             success: function (response) {
-                if (response.status == true) {
-                    let datas = response.data
-                    let post = ""
-                    for (let data of datas) {
-                        post += `
-                                 <tr id = post_${data.id}>
-                                    <th scope="row">${data.id}</th>
-                                    <td>${data.name}</td>
-                                    <td>${data.title}</td>
-                                    <td>${data.created_at}</td>
-                                    <td>
-                                        <button onclick="delete_post(this)" type="submit"  data-post-id="${data.id}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                if (response.status === true) {
+                    let datas = response.data;
 
-                                    </td>
-                                </tr>
-                        `
-                        $("#posts").html(post);
+                    let post = "";
+                    for (let data of datas) {
+                        console.log(data)
+                        post += `
+                        <tr id="post_${data.id}">
+                            <th scope="row">${data.id}</th>
+                            <td>${data.name}</td>
+                            <td>${data.title}</td>
+                            <td>${data.created_at}</td>
+                            <td>${data.verified === 1 ? 'yes': 'no'}</td>
+                                    <td>
+                                        <button onclick="delete_post(this)" type="submit" data-post-id="${data.id}" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                     }
 
+                    $("#posts").html(post);
                 }
             },
             error: function () {
-                console.log(response)
+                console.log("eror");
             }
         });
-    });
 
+    });
+    // function loadPosts() {
+    //
+    // }
+    // loadPosts();
+    // setInterval(loadPosts, 3000);
 </script>
 

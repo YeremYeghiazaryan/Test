@@ -14,11 +14,15 @@ class WebsiteController extends Controller
     public function showAllWebsites()
     {
         $userId = Auth::id();
-        $websiteDates = Website::where('user_id', $userId)->get();
+        $websiteData = Website::where('user_id', $userId)->get();
         return response()->json([
             'status' => true,
-            'data' => $websiteDates
+            'data' => $websiteData
         ]);
+    }
+    public function index()
+    {
+        return view('dashboard.index');
     }
 
     /**
@@ -88,7 +92,7 @@ class WebsiteController extends Controller
             'name.unique' => 'Name already exists.',
 
         ]);
-        $website = Website::where('id', $id)->update([
+             Website::where('id', $id)->update([
             'name' => $validated['name'],
         ]);
         return redirect()->route('index')->with('message', 'Updated successfully!');
