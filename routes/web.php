@@ -4,31 +4,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleController;
+Route::redirect('/', '/login')->name('login');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
 
-Route::redirect('/', '/login');
+Route::get('/post/create/{id}', [PostController::class, 'createIndex'])->name('create-post.dashboard');
 
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/login', [AuthController::class, 'loginUser'])->name('login-user');
-});
+Route::get('/website/edit/{id}', [WebsiteController::class, 'editIndex'])->name('edit-website.dashboard');
+Route::get('/website/create', [WebsiteController::class, 'create'])->name('create-website');
+Route::get('/dashboard', [WebsiteController::class, 'index'])->name('dashboard');
+Route::get('/website/show/{id}', [WebsiteController::class, 'showIndex'])->name('show-website.dashboard');
 
-Route::middleware(['auth'])->group(function () {
-
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    Route::get('/posts/verify/{id}', [PostController::class, 'verify'])->name('posts-verify');
-    Route::get('/create/post/{id}', [PostController::class, 'create'])->name('create-post');
-    Route::post('/post/store', [PostController::class, 'store'])->name('store-post');
-    Route::get('post/destroy', [PostController::class, 'destroyPost'])->name('remove-post');
-    Route::get('post/show', [PostController::class, 'showAllPosts'])->name('show-all-posts');
-
-    Route::get('/dashboard', [WebsiteController::class, 'index'])->name('index');
-    Route::get('/create/website', [WebsiteController::class, 'create'])->name('create-website');
-    Route::post('/store/website', [WebsiteController::class, 'store'])->name('store-website');
-    Route::get('website/destroy', [WebsiteController::class, 'destroy'])->name('remove-website');
-    Route::get('/edit/{id}', [WebsiteController::class, 'edit'])->name('edit-website');
-    Route::post('/update', [WebsiteController::class, 'update'])->name('update-website');
-    Route::get('/website/show', [WebsiteController::class, 'showAllWebsites'])->name('show-all-websites');
-    Route::get('/show/{id}', [WebsiteController::class, 'show'])->name('show-website');
-});
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google-redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);

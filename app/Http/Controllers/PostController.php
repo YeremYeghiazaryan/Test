@@ -6,10 +6,13 @@ use App\Jobs\SendMailToOwnerJob;
 use App\Models\PostNotificationStatus;
 use App\Models\Post;
 use App\Models\Subscription;
+use App\Models\Website;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
-class PostController extends Controller
+class
+PostController extends Controller
 {
     public function showAllPosts(Request $request)
     {
@@ -22,37 +25,47 @@ class PostController extends Controller
         ]);
     }
 
-    public function create($id)
+    public function createINdex($id)
     {
         return view('dashboard.create_post', ['id' => $id]);
     }
 
+    public function create($id)
+    {
+        $website = Website::find($id);
+        if (!$website) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Website not found.'
+            ], 404);
+        }
+        if ($website->user_id != Auth::id()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized.'
+            ], 403);
+        }
+        return response()->json([
+            'status' => true,
+            'data' => $website
+        ]);
+    }
+
     public function store(Request $request)
     {
+
         $postData = $request->validate([
             'name' => 'required|min:5|max:255',
             'website_id' => 'required|exists:websites,id|integer',
             'title' => 'required|max:255',
-        ], [
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'title.max' => 'The title may not be greater than 255 characters.',
-            'name.required' => 'name is required',
-            'website_id.required' => 'website is required',
-            'title.required' => 'title is required',
-            'website_id.integer' => 'website is required',
-            'website_id.exists' => 'website is required',
-            'name.min' => 'name must be at least 5 characters',
-
         ]);
-
-
         $post = Post::create($postData);
+
         if ($post) {
             SendMailToOwnerJob::dispatch($post);
         }
-        return $post
-            ? redirect()->route('index')->with('message', 'Created successfully!')
-            : redirect()->back()->with('error', 'Failed to create post.');
+
+        return response()->json(["status" => true, "data" => $post]);
     }
 
     public function verify($id)
@@ -73,9 +86,8 @@ class PostController extends Controller
             }
         }
 
-        return redirect()->route('show-website',['id' => $post->website_id])->with('message', 'Verified successfully');
+        return redirect()->route('show-website.dashboard', ['id' => $post->website_id])->with('message', 'Verified successfully');
     }
-
 
     public function destroyPost(Request $request)
     {

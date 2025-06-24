@@ -3,105 +3,114 @@
 namespace App\Http\Controllers;
 
 use App\Models\Website;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class WebsiteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function showAllWebsites()
-    {
-        $userId = Auth::id();
-        $websiteData = Website::where('user_id', $userId)->get();
-        return response()->json([
-            'status' => true,
-            'data' => $websiteData
-        ]);
-    }
     public function index()
     {
         return view('dashboard.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('dashboard.create_website');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function showAllWebsites()
+    {
+        $userId = Auth::id();
+        $websites = Website::where('user_id', $userId)->get();
+        return response()->json([
+            'status' => true,
+            'data' => $websites
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|min:3|max:255|unique:websites,name',
-        ], [
-            'name.required' => 'Name is required.',
-            'name.string' => 'Name must be a string.',
-            'name.min' => 'Name must be at least 3 characters.',
-            'name.max' => 'Name must be less than 255 characters.',
-            'name.unique' => 'Name already exists.',
         ]);
-
         $website = Website::create([
             'name' => $validated['name'],
             'user_id' => Auth::id(),
         ]);
-        return $website
-            ? redirect()->route('index')->with('message', 'Created successfully!')
-            : redirect()->back()->with('error', 'Failed to create post.');
+        return response()->json(["status" => true, "data" => $website]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $website = Website::all()->where('id', $id)->first();
-        return view('dashboard.show_website', ['website' => $website]);
+        $website = Website::find($id);
+
+        if (!$website) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Website not found.'
+            ], 404);
+        }
+        if ($website->user_id != Auth::id()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized.'
+            ], 403);
+        }
+        return response()->json([
+            'status' => true,
+            'data' => $website
+        ]);
+    }
+
+
+    public function showIndex(string $id)
+    {
+        return view('dashboard.show_website', ['id' => $id]);
+    }
+
+    public function editIndex(string $id)
+    {
+
+        return view('dashboard.edit_website', ["id" => $id]);
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $website = Website::findOrFail($id);
-        return view('dashboard.edit_website', compact('website'));
+
+        $website = Website::find($id);
+
+        if (!$website) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Website not found.'
+            ], 404);
+        }
+        if ($website->user_id != Auth::id()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized.'
+            ], 403);
+        }
+        return response()->json([
+            'status' => true,
+            'data' => $website
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
         $id = $request->input('id');
         $validated = $request->validate([
             'name' => 'required|string|min:3|max:255|unique:websites,name,' . $id,
-        ], [
-            'name.required' => 'Name is required.',
-            'name.string' => 'Name must be a string.',
-            'name.min' => 'Name must be at least 3 characters.',
-            'name.max' => 'Name must be less than 255 characters.',
-            'name.unique' => 'Name already exists.',
-
         ]);
-             Website::where('id', $id)->update([
+        Website::where('id', $id)->update([
             'name' => $validated['name'],
         ]);
-        return redirect()->route('index')->with('message', 'Updated successfully!');
-
+        return response()->json(["status" => true]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request)
     {
         $id = $request->get('website_id');

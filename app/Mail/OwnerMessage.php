@@ -40,7 +40,7 @@ class OwnerMessage extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mailToOwner',
+            view: 'mail_to_owner',
             with: [
                 'post' => $this->post,
             ]
